@@ -22,12 +22,12 @@ def buscar_clinicas(cidade):
 
     # Fazendo a requisição
     resposta = requests.get(url, params={'data': query})
-    dados = resposta.json()
+    data = resposta.json()
 
     clinicas = []
     
     # Processando o JSON retornado
-    for elemento in dados.get('elements', []):
+    for elemento in data.get('elements', []):
         tags = elemento.get('tags', {})
 
         # Filtra apenas locais que tenham o nome registrado
@@ -54,8 +54,8 @@ def principal():
         resultados = buscar_clinicas(cidade)
         todas_clinicas.extend(resultados)
 
-    # Cria a pasta 'dados' caso ela ainda não exista
-    os.makedirs('dados', exist_ok=True)
+    # Cria a pasta 'data' caso ela ainda não exista
+    os.makedirs('data', exist_ok=True)
 
     # Converte a lista de dicionários em um DataFrame do pandas
     df = pd.DataFrame(todas_clinicas)
@@ -64,11 +64,11 @@ def principal():
     df['Endereço'] = df['Endereço'].replace('', 'N/A')
 
     # Exportando os dados
-    df.to_csv('dados/clinicas.csv', index=False, encoding='utf-8')
-    df.to_json('dados/clinicas.json', orient='records', force_ascii=False, indent=4)
+    df.to_csv('data/clinicas.csv', index=False, encoding='utf-8')
+    df.to_json('data/clinicas.json', orient='records', force_ascii=False, indent=4)
 
     print(f"\nExtração concluída com sucesso! {len(todas_clinicas)} contatos encontrados.")
-    print("Arquivos salvos na pasta 'dados/'.")
+    print("Arquivos salvos na pasta 'data/'.")
 
 if __name__ == "__main__":
     principal()
